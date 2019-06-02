@@ -3,132 +3,49 @@
 import sys
 import re
 
-tdigit     = '\d+'
-trvariable = '\$var'
-trbegin    = '\$begin'
-trend      = '\$end'
-trmove     = '\$move'
-trturn     = '\$turn'
-trdefine   = '\$define'
-taright    = 'right'
-taforward  = 'forward'
+tokens = {
+    "number":       (0,r'\d+'),
+    "variable":     (1,r'\$var'),
+    "begin":        (2,r'\$begin'),
+    "end":          (3,r'\$end'),
+    "move":         (4,r'\$move'),
+    "turn":         (5,r'\$turn'),
+    "define":       (6,r'\$define'),
+    "arg_right":    (7,r'right'),
+    "arg_forward":  (8,r'forward'),
+    "identifier":   (9,r'[a-zA-Z]+'),
+    "oparenthesis": (10,r'\('),
+    "cparenthesis": (11,r'\)'),
+    "comma":        (12,r','),
+    "equal":        (13,r':='),
+    "plus":         (14,r'\+'),
+    "minus":        (15,r'\-'),
+    "comment":      (16,r'//.*'),
+    "newline":      (17,r'\n'),
+    "whitespace":   (18,r' ')
+}
 
-tidentifier   = '[a-zA-Z]+'
-toparenthesis = '\('
-tcparenthesis = '\)'
-tccomma   = ','
-tcequal  = ':='
-tcplus    = '\+'
-tcminus   = '\-'
-tcomment = '//.*' 
-tnewline    = '\n' 
-twhitespace = ' ' 
-
-NUMBER       = 0
-VARIABLE     = 1
-BEGIN        = 2
-END          = 3
-OPARENTHESIS = 4
-CPARENTHESIS = 5
-COMMA        = 6
-COMMENT      = 7
-NEWLINE      = 8
-WHITESPACE   = 9
-MOVE         = 10
-DEFINE       = 11
-IDENTIFIER   = 12
-EQUAL        = 13
-TURN         = 14
-ARGRIGHT     = 15
-ARGFORWARD   = 16
-
-NOTOKEN = 255
+OTHER_LEXEMA = 255
 
 error = 0
 idx   = 0
 llen  = 0
 
-def print_lexema(ret,lexema):
-    if ret == NUMBER:
-        print("{}\tis\tNUMBER".format(lexema))
-    elif ret == VARIABLE:
-        print("{}\tis\tVARIABLE".format(lexema))
-    elif ret == BEGIN:
-        print("{}\tis\tBEGIN".format(lexema))
-    elif ret == END:
-        print("{}\tis\tEND".format(lexema))
-    elif ret == OPARENTHESIS:
-        print("{}\tis\tOPARENTHESIS".format(lexema))
-    elif ret == CPARENTHESIS:
-        print("{}\tis\tCPARENTHESIS".format(lexema))
-    elif ret == COMMA:
-        print("{}\tis\tCOMMA".format(lexema))
-    elif ret == COMMENT:
-        print("{}\tis\tCOMMENT".format(lexema))
-    elif ret == NEWLINE:
-        print("{}\tis\tNEWLINE".format("nl"))
-    elif ret == NOTOKEN:
-        print("{}\tis\tNOTOKEN".format(lexema))
-    elif ret == WHITESPACE:
-        print("{}\tis\tWHITESPACE".format(lexema))
-    elif ret == DEFINE:
-        print("{}\tis\tDEFINE".format(lexema))
-    elif ret == MOVE:
-        print("{}\tis\tMOVE".format(lexema))
-    elif ret == EQUAL:
-        print("{}\tis\tEQUAL".format(lexema))
-    elif ret == IDENTIFIER:
-        print("{}\tis\tIDENTIFIER".format(lexema))
-    elif ret == TURN:
-        print("{}\tis\tTURN".format(lexema))
-    elif ret == ARGRIGHT:
-        print("{}\tis\tARIGHT".format(lexema))
-    elif ret == ARGFORWARD:
-        print("{}\tis\tAFORWARD".format(lexema))
-    elif ret == TURN:
-        print("{}\tis\tTURN".format(lexema))
-    else:
-        print("{}\tis\tOTHER".format(lexema))
+def print_lexema(ttype,lexema):
+    found = 0
+    for key in tokens:
+        if tokens[key][0] == ttype:
+            print "{}\tis\t{}".format(lexema,key)
+            found = 1
+    if found == 0:
+        print "Error: {} not a token".format(lexema)
 
 def get_token(lexema):
-    ret = NOTOKEN
-    if re.match(tdigit, lexema):
-        ret = NUMBER
-    elif re.match(trvariable, lexema):
-        ret = VARIABLE
-    elif re.match(trbegin, lexema):
-        ret = BEGIN
-    elif re.match(trend, lexema):
-        ret = END
-    elif re.match(toparenthesis, lexema):
-        ret = OPARENTHESIS
-    elif re.match(tcparenthesis, lexema):
-        ret = CPARENTHESIS
-    elif re.match(tccomma, lexema):
-        ret = COMMA
-    elif re.match(tcequal, lexema):
-        ret = EQUAL
-    elif re.match(tcomment, lexema):
-        ret = COMMENT
-    elif re.match(tnewline, lexema):
-        ret = NEWLINE
-    elif re.match(twhitespace, lexema):
-        ret = WHITESPACE
-    elif re.match(trdefine, lexema):
-        ret = DEFINE
-    elif re.match(trmove, lexema):
-        ret = MOVE
-    elif re.match(trturn, lexema):
-        ret = TURN
-    elif re.match(taforward, lexema):
-        ret = ARGFORWARD
-    elif re.match(taright, lexema):
-        ret = ARGRIGHT
-    elif re.match(tidentifier, lexema):
-        ret = IDENTIFIER
-
+    ret = OTHER_LEXEMA
+    for key in tokens:
+        if re.match(tokens[key][1],lexema):
+            ret = tokens[key][0]
     return ret
-
 
 def Variables(sequence):
     global idx
@@ -136,24 +53,24 @@ def Variables(sequence):
 
     token = get_token(sequence[idx])
     print_lexema(token,sequence[idx])
-    while token == VARIABLE and idx < llen:
+    while token == tokens["variable"][0] and idx < llen:
          idx = idx + 1
          token = get_token(sequence[idx])
          print_lexema(token,sequence[idx])
-         if token == IDENTIFIER:
+         if token == tokens["identifier"][0]:
              idx = idx + 1
          else:
              print "Error !!"
          
          token = get_token(sequence[idx])
          print_lexema(token,sequence[idx])
-         if token == EQUAL:
+         if token == tokens["equal"][0]:
              idx = idx + 1
          else:
              print "Error !!"
 
          token = get_token(sequence[idx])
-         if token == NUMBER:
+         if token == tokens["number"][0]:
              idx = idx + 1
          else:
              print "Error !!"
@@ -164,12 +81,12 @@ def Defines(sequence):
     
     token = get_token(sequence[idx])
     print_lexema(token,sequence[idx])
-    while token == COMMENT and idx < llen:
+    while token == tokens["comment"][0] and idx < llen:
         idx = idx + 1
         token = get_token(sequence[idx])
         print_lexema(token,sequence[idx])
     
-    if token == DEFINE and idx < llen:
+    if token == tokens["define"][0] and idx < llen:
         idx = idx + 1
         Variables(sequence)
     else:
@@ -181,7 +98,7 @@ def Begin(sequence):
     global llen
     token = get_token(sequence[idx])
     print_lexema(token,sequence[idx])
-    if token == BEGIN and idx < llen:
+    if token == tokens["begin"][0] and idx < llen:
         idx = idx + 1
     else:
         print "Error !!"
@@ -191,7 +108,7 @@ def Argument(sequence):
     global llen
     token = get_token(sequence[idx])
     print_lexema(token,sequence[idx])
-    if token == ARGRIGHT or ARGFORWARD:
+    if token == tokens["arg_right"][0] or tokens["arg_forward"][0]:
         idx = idx + 1
     else:
         print "Error !!"
@@ -201,7 +118,7 @@ def Expression(sequence):
     global llen
     token = get_token(sequence[idx])
     print_lexema(token,sequence[idx])
-    if token == NUMBER:
+    if token == tokens["number"][0]:
         idx = idx + 1
     else:
         print "{} Error !!".format(sequence[idx])
@@ -211,21 +128,21 @@ def Behaviour(sequence):
     global llen
     token = get_token(sequence[idx])
     print_lexema(token,sequence[idx])
-    while token == MOVE or token == TURN:
+    while token == tokens["move"][0] or token == tokens["turn"][0]:
         idx = idx + 1
         token = get_token(sequence[idx])
         print_lexema(token,sequence[idx])
-        if token == OPARENTHESIS:
+        if token == tokens["oparenthesis"][0]:
             idx = idx + 1
             Argument(sequence)
             token = get_token(sequence[idx])
             print_lexema(token,sequence[idx])
-            if token == COMMA:
+            if token == tokens["comma"][0]:
                 idx = idx + 1
                 Expression(sequence)
                 token = get_token(sequence[idx])
                 print_lexema(token,sequence[idx])
-                if token == CPARENTHESIS:
+                if token == tokens["cparenthesis"][0]:
                     idx = idx + 1
                 else:
                     print "Error !!"
@@ -240,7 +157,7 @@ def End(sequence):
     global llen
     token = get_token(sequence[idx])
     print_lexema(token,sequence[idx])
-    if token != END:
+    if token != tokens["end"][0]:
         print "Error !!"
 
 def Compile(sequence):
