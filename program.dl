@@ -1,0 +1,9 @@
+// this is a comment
+$define
+    $int x:=50
+    $string str := "hello"
+$begin
+    $move(forward,x)
+    $print(str)
+    $turn(right,90)
+$end
