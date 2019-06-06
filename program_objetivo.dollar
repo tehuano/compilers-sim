@@ -1,0 +1,27 @@
+// this is a comment
+$define
+    $int x:=100
+$begin
+    $turn(right,90)
+    $pencil(up)
+    $move(backward,x*3)
+    $pencil(down)
+    $for (4) $begin
+        $move(forward,x)
+        $turn(left,90)
+    $end
+    $pencil(up)
+    $move(forward,x + x/2)
+    $pencil(down)
+    $for (3) $begin
+        $move(forward,x + x/4)
+        $turn(left,90+30)
+    $end
+    $pencil(up)
+    $move(forward,x + x)
+    $pencil(down)
+    $for (5) $begin
+        $move(forward,x * 3 / 4)
+        $turn(left,72)
+    $end
+$end

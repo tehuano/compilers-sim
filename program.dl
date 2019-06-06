@@ -14,7 +14,13 @@ $begin
             $print(world)
         $end
     $end
+
+    $for (100) $begin
+        $move(forward,repcount * 2)
+        $turn(right,90)
+    $end
+
     $turn(left,90)
-    $move(forward,x)
+    $move(forward,x*2)
     $print(str)
 $end

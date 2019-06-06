@@ -16,7 +16,7 @@ tokens = {
     "arg_right":    (8,r'right',"right"),
     "arg_left":     (9,r'left',"left"),
     "arg_forward":  (10,r'forward',"forward"),
-    "arg_backward": (11,r'backward',"backward"),
+    "arg_backward": (11,r'backward',"back"),
     "identifier":   (12,r'[a-zA-Z][a-zA-Z0-9_]*',""),
     "oparenthesis": (13,r'\(',""),
     "cparenthesis": (14,r'\)',""),
@@ -33,7 +33,11 @@ tokens = {
     "whitespace":   (26,r' ',""),
     "rstring":      (27,r'\$string',"make"),
     "print":        (28,r'\$print',"label"),
-    "string":       (29,r'\".*\"',"")
+    "string":       (29,r'\".*\"',""),
+    "pencil":       (30,r'\$pencil',"pen"),
+    "for":          (31,r'\$for',"repeat"),
+    "up":           (32,r'up',"up"),
+    "down":         (33,r'down',"down")
 }
 
 sym_table = {"none": (0,"integer")}
@@ -75,9 +79,37 @@ def get_token(lexema):
         message("E","TOKEN",lexema,"Does not match any pattern.")
     return ret
 
+def arg1_is_command(token):
+    ret = False
+    if token == tokens["move"][0] or token == tokens["turn"][0]:
+        ret = True
+    elif token == tokens["pencil"][0]:
+        ret = True
+    return ret
+
+def arg1_is_expression(token):
+    ret = False
+    if token == tokens["print"][0] or token == tokens["if"][0]:
+        ret = True
+    return ret
+
+def arg1_is_number(token):
+    ret = False
+    if token == tokens["for"][0]:
+        ret = True
+    return ret
+
+def is_control(token):
+    ret = False
+    if token == tokens["if"][0] or token == tokens["for"][0]:
+        ret = True
+    return ret
+
 def is_operator(token):
     ret = False
     if token == tokens["plus"][0] or token == tokens["minus"][0]:
+        ret = True
+    elif token == tokens["multiply"][0] or token == tokens["divide"][0]:
         ret = True
     return ret
 
@@ -99,6 +131,8 @@ def is_statement(token):
         ret = True
     elif token == tokens["print"][0] or token == tokens["if"][0]:
         ret = True
+    elif token == tokens["for"][0] or token == tokens["pencil"][0]:
+        ret = True
     return ret
 
 def is_command(token):
@@ -107,12 +141,16 @@ def is_command(token):
         ret = True
     elif token == tokens["arg_forward"][0] or token == tokens["arg_backward"][0]:
         ret = True
+    elif token == tokens["down"][0] or token == tokens["up"][0]:
+        ret = True
     return ret
 
-def is_one_argument(token):
-    ret = False
+def number_of_arguments(token):
+    ret = 2
     if token == tokens["print"][0] or token == tokens["if"][0]:
-        ret = True
+        ret = 1
+    if token == tokens["for"][0] or token == tokens["pencil"][0]:
+        ret = 1
     return ret
 
 def is_terminal(token):
@@ -151,7 +189,9 @@ def generate_code(token,value):
             if token == tokens["move"][0] or token == tokens["turn"][0]:
                 previous_token = token
             if tokens[keyt][2]:
-                output = output + tokens[keyt][2] + ' '
+                output = output + tokens[keyt][2]
+                if token != tokens["pencil"][0]:
+                    output = output + ' '
         else:
             error = True
             message("E",token,value,"No rule for this expression gen_code.")
@@ -236,7 +276,7 @@ def Begin(sequence):
     else:
         message("E","$begin",sequence[idx],"")
 
-def Argument(sequence):
+def Command(sequence):
     global idx
     global llen
     token = get_token(sequence[idx])
@@ -305,7 +345,7 @@ def Expression(sequence):
             ArithmeticExpression(sequence)
         elif is_comparator(token):
             output = output + sequence[idx]
-            idx = idx +1
+            idx = idx + 1
             LogicalExpression(sequence)
     else:
         message("E","Expression",sequence[idx],"")
@@ -319,29 +359,37 @@ def Statements(sequence):
     t1 = OTHER_LEXEMA
     token = get_token(sequence[idx])
     while is_statement(token):
-        arguments = 2
         t1 = token
         # generate code according for the instruction
         generate_code(token,"")
         # check if it is one argument command
-        if is_one_argument(token):
-            arguments = 1
+        arguments = number_of_arguments(token)
         # increment index to check next token
         idx = idx + 1
         token = get_token(sequence[idx])
         if token == tokens["oparenthesis"][0]:
             idx = idx + 1
-            # check move or turn commands
-            if 1 < arguments:
-                Argument(sequence)
+            if arg1_is_command(t1):
+                Command(sequence)
+            elif arg1_is_expression(t1):
+                Expression(sequence)
+            elif arg1_is_number(t1):
                 token = get_token(sequence[idx])
-                # proces more arguments if needed
+                if token == tokens["number"][0]:
+                    generate_code(token,sequence[idx])
+                    idx = idx + 1
+            else:
+                message("E","Command or Expression",sequence[idx],"Not correct.")
+
+            # proces more arguments if needed
+            if 1 < arguments:
+                token = get_token(sequence[idx])
                 if token == tokens["comma"][0]:
                     idx = idx + 1
+                    Expression(sequence)
                 else:
-                    message("E","\',\'",sequence[idx],"")
-            # check the expression argument 
-            Expression(sequence)
+                    message("E","comma",sequence[idx],"")
+                
             token = get_token(sequence[idx])
             # check when parenthesis is closed
             if token == tokens["cparenthesis"][0]:
@@ -351,11 +399,10 @@ def Statements(sequence):
         else:
             message("E","(",sequence[idx],"")
         # if this is the body of an if sentence
-        if t1 == tokens["if"][0]:
+        if is_control(t1):
             Begin(sequence)
             if False == error:
-                print_spaces()
-                output = output + '[\n'
+                output = output + ' [\n'
                 spaces = spaces + 1
             Statements(sequence)
             End(sequence)
