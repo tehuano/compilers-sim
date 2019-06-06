@@ -1,9 +1,20 @@
 // this is a comment
 $define
     $int x:=50
-    $string str := "hello"
+    $string hello := "hello"
+    $string world := "world"
+    $string str := "logo"
 $begin
+    $turn(right,90)
+    $if(x>10) $begin
+        $move(forward,x)
+        $print(hello)
+        $if (100 > x) $begin
+            $move(forward,x)
+            $print(world)
+        $end
+    $end
+    $turn(left,90)
     $move(forward,x)
     $print(str)
-    $turn(right,90)
 $end
