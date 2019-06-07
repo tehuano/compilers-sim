@@ -4,8 +4,29 @@ $define
     $string hello := "hello"
     $string world := "world"
     $string str := "logo"
+    $string rommel := "rommel"
 $begin
     $turn(right,90)
+    $move(forward,x*2)
+    $move(backward,x)
+    $turn(left,45)
+    $setxy(10,50)
+    $setx(10) 
+    $sety(20)
+    $heading(15)
+    $arc(90,30)
+    $home()
+    $clean()
+    $clear()
+    $print(rommel)
+    $pencil(up)
+    $pencil(down)
+    $pencil(erase)
+    $pencil(paint)
+    $pencolor(4)
+    $pensize(22)
+    $background(2)
+    $load("file.txt")
     $if(x>10) $begin
         $move(forward,x)
         $print(hello)
@@ -19,8 +40,5 @@ $begin
         $move(forward,repcount * 2)
         $turn(right,90)
     $end
-
-    $turn(left,90)
-    $move(forward,x*2)
-    $print(str)
+    $bye()
 $end

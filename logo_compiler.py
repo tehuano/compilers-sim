@@ -13,31 +13,47 @@ tokens = {
     "turn":         (5,r'\$turn',""),
     "define":       (6,r'\$define',""),
     "if":           (7,r'\$if',"if"),
-    "arg_right":    (8,r'right',"right"),
     "arg_left":     (9,r'left',"left"),
+    "arg_right":    (8,r'right',"right"),
     "arg_forward":  (10,r'forward',"forward"),
     "arg_backward": (11,r'backward',"back"),
-    "identifier":   (12,r'[a-zA-Z][a-zA-Z0-9_]*',""),
-    "oparenthesis": (13,r'\(',""),
-    "cparenthesis": (14,r'\)',""),
-    "comma":        (15,r',',""),
-    "equal":        (16,r':=',""),
-    "plus":         (17,r'\+',""),
-    "minus":        (19,r'\-',""),
-    "divide":       (20,r'\/',""),
-    "multiply":     (21,r'\*',""),
-    ">":            (22,r'\>',""),
-    "<":            (23,r'\<',""),
-    "comment":      (24,r'//.*',""),
-    "newline":      (25,r'\n',""),
-    "whitespace":   (26,r' ',""),
-    "rstring":      (27,r'\$string',"make"),
-    "print":        (28,r'\$print',"label"),
-    "string":       (29,r'\".*\"',""),
-    "pencil":       (30,r'\$pencil',"pen"),
-    "for":          (31,r'\$for',"repeat"),
-    "up":           (32,r'up',"up"),
-    "down":         (33,r'down',"down")
+    "arg_up":       (12,r'up',"up"),
+    "arg_down":     (13,r'down',"down"),
+    "arg_erase":    (14,r'erase',"erase"),
+    "arg_paint":    (15,r'paint',"paint"),
+    "oparenthesis": (19,r'\(',""),
+    "cparenthesis": (20,r'\)',""),
+    "comma":        (21,r',',""),
+    "equal":        (22,r':=',""),
+    "plus":         (23,r'\+',""),
+    "minus":        (24,r'\-',""),
+    "divide":       (25,r'\/',""),
+    "multiply":     (26,r'\*',""),
+    ">":            (27,r'\>',""),
+    "<":            (28,r'\<',""),
+    "lequal":       (53,r'==',""),
+    "comment":      (29,r'//.*',""),
+    "newline":      (30,r'\n',""),
+    "whitespace":   (31,r' ',""),
+    "rstring":      (32,r'\$string',"make"),
+    "print":        (33,r'\$print',"label"),
+    "string":       (34,r'\".*\"',""),
+    "pencil":       (35,r'\$pencil',"pen"),
+    "for":          (38,r'\$for',"repeat"),
+    "setxy":        (39,r'\$setxy',"setxy"),
+    "setx":         (40,r'\$setx',"setx"),
+    "sety":         (41,r'\$sety',"sety"),
+    "heading":      (42,r'\$heading',"setheading"),
+    "arc":          (43,r'\$arc',"arc"),
+    "home":         (44,r'\$home',"home"),
+    "clean":        (45,r'\$clean',"clean"),
+    "clear":        (46,r'\$clear',"clearscreen"),
+    "bg":           (47,r'\$background',"setbackground"),
+    "bye":          (48,r'\$bye',"bye"),
+    "load":         (49,r'\$load',"load"),
+    "pencolor":     (50,r'\$pencolor',"setpencolor"),
+    "pensize":      (51,r'\$pensize',"setpensize"),
+    "identifier":   (52,r'[a-zA-Z][a-zA-Z0-9_]*',"")
 }
 
 sym_table = {"none": (0,"integer")}
@@ -79,6 +95,12 @@ def get_token(lexema):
         message("E","TOKEN",lexema,"Does not match any pattern.")
     return ret
 
+def needs_separator(token):
+    ret = False
+    if token == tokens["setxy"][0] or token == tokens["arc"][0]:
+        ret = True
+    return ret
+
 def arg1_is_command(token):
     ret = False
     if token == tokens["move"][0] or token == tokens["turn"][0]:
@@ -91,11 +113,15 @@ def arg1_is_expression(token):
     ret = False
     if token == tokens["print"][0] or token == tokens["if"][0]:
         ret = True
-    return ret
-
-def arg1_is_number(token):
-    ret = False
-    if token == tokens["for"][0]:
+    elif token == tokens["setxy"][0] or token == tokens["heading"][0]:
+        ret = True
+    elif token == tokens["setx"][0] or token == tokens["sety"][0]:
+        ret = True
+    elif token == tokens["arc"][0] or token == tokens["bg"][0]:
+        ret = True
+    elif token == tokens["pencolor"][0] or token == tokens["pensize"][0]:
+        ret = True
+    elif token == tokens["load"][0] or token == tokens["for"][0]:
         ret = True
     return ret
 
@@ -133,6 +159,20 @@ def is_statement(token):
         ret = True
     elif token == tokens["for"][0] or token == tokens["pencil"][0]:
         ret = True
+    elif token == tokens["setxy"][0] or token == tokens["setx"][0]:
+        ret = True
+    elif token == tokens["sety"][0] or token == tokens["heading"][0]:
+        ret = True
+    elif token == tokens["arc"][0] or token == tokens["home"][0]:
+        ret = True
+    elif token == tokens["clean"][0] or token == tokens["clear"][0]:
+        ret = True
+    elif token == tokens["load"][0] or token == tokens["bye"][0]:
+        ret = True
+    elif token == tokens["pencolor"][0] or token == tokens["pensize"][0]:
+        ret = True
+    elif token == tokens["bg"][0]:
+        ret = True
     return ret
 
 def is_command(token):
@@ -141,7 +181,9 @@ def is_command(token):
         ret = True
     elif token == tokens["arg_forward"][0] or token == tokens["arg_backward"][0]:
         ret = True
-    elif token == tokens["down"][0] or token == tokens["up"][0]:
+    elif token == tokens["arg_down"][0] or token == tokens["arg_up"][0]:
+        ret = True
+    elif token == tokens["arg_erase"][0] or token == tokens["arg_paint"][0]:
         ret = True
     return ret
 
@@ -149,15 +191,21 @@ def number_of_arguments(token):
     ret = 2
     if token == tokens["print"][0] or token == tokens["if"][0]:
         ret = 1
-    if token == tokens["for"][0] or token == tokens["pencil"][0]:
+    elif token == tokens["for"][0] or token == tokens["bg"][0]:
         ret = 1
+    elif token == tokens["setx"][0] or token == tokens["sety"][0]:
+        ret = 1
+    elif token == tokens["heading"][0] or token == tokens["load"][0]:
+        ret = 1
+    elif token == tokens["pencil"][0] or token == tokens["pencolor"][0] or token == tokens["pensize"][0]:
+        ret = 1
+    elif token == tokens["home"][0] or token == tokens["clean"][0] or token == tokens["clear"][0] or token == tokens["bye"][0]:
+        ret = 0
     return ret
 
 def is_terminal(token):
     ret = False
-    if token == tokens["number"][0] or token == tokens["identifier"][0]:
-        ret = True
-    elif token == tokens["string"][0]:
+    if token == tokens["number"][0] or token == tokens["identifier"][0] or token == tokens["string"][0]:
         ret = True
     return ret
 
@@ -203,6 +251,10 @@ def generate_code(token,value):
                 if token == tokens["string"][0]:
                     valuet = valuet.replace('\"','')
                 valuet = '\"' + valuet
+        elif "Expression" == caller.function:
+            if token == tokens["string"][0]:
+                valuet = '\"' + valuet.replace('\"','')
+        # assing the formated string or variable 
         output = output + valuet
         if "Variables" == caller.function:
             output = output + ' '
@@ -248,7 +300,7 @@ def Variables(sequence):
                  message("W","string",sequence[idx],"Incorrect assignement.")
              idx = idx + 1
          else:
-             print "Error. Not a value for {}".format(variable)
+             message("W",variable,"value","Wrong value.")
          output = output + '\n'
          token = get_token(sequence[idx])
 
@@ -285,7 +337,7 @@ def Command(sequence):
         generate_code(token,"")
         idx = idx + 1
     else:
-        message("E","command",sequence[idx],"")
+        message("E","command",lexema,"")
 
 def ArithmeticExpression(sequence):
     global idx
@@ -369,27 +421,25 @@ def Statements(sequence):
         token = get_token(sequence[idx])
         if token == tokens["oparenthesis"][0]:
             idx = idx + 1
-            if arg1_is_command(t1):
-                Command(sequence)
-            elif arg1_is_expression(t1):
-                Expression(sequence)
-            elif arg1_is_number(t1):
-                token = get_token(sequence[idx])
-                if token == tokens["number"][0]:
-                    generate_code(token,sequence[idx])
-                    idx = idx + 1
-            else:
-                message("E","Command or Expression",sequence[idx],"Not correct.")
+            if 1 <= arguments:
+                if arg1_is_command(t1):
+                    Command(sequence)
+                elif arg1_is_expression(t1):
+                    Expression(sequence)
+                else:
+                    message("E","Command or Expression",sequence[idx],"Not correct.")
 
             # proces more arguments if needed
             if 1 < arguments:
                 token = get_token(sequence[idx])
                 if token == tokens["comma"][0]:
                     idx = idx + 1
+                    if needs_separator(t1):
+                        output = output + ' '
                     Expression(sequence)
                 else:
                     message("E","comma",sequence[idx],"")
-                
+            
             token = get_token(sequence[idx])
             # check when parenthesis is closed
             if token == tokens["cparenthesis"][0]:
