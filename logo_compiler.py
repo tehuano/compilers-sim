@@ -256,8 +256,12 @@ def generate_code(token,value):
         elif "Expression" == caller.function:
             if token == tokens["string"][0]:
                 valuet = '\"' + valuet.replace('\"','')
-        # assing the formated string or variable 
+        # assing the formated string or variable
+        if token == tokens["identifier"] [0]:
+            if not sym_table.get(value,False):
+                message("E",token,value,"Not defined.")
         output = output + valuet
+                
         if "Variables" == caller.function:
             output = output + ' '
 
@@ -488,7 +492,7 @@ def Compile(sequence):
 def main():
     global debug_mode
     global output
-
+    global error_file
     contents = []
     with open(sys.argv[1], 'r') as f:
         contents = f.read()
