@@ -67,12 +67,14 @@ idx   = 0
 llen  = 0
 debug_mode = False
 
+error_file = ''
 output = ""
 spaces = 0
 previous_token = OTHER_LEXEMA
 
 def message(mtype,expected,received,description):
     global error
+    global error_file
     debug_info = ""
     if debug_mode:
         for st in inspect.stack():
@@ -80,7 +82,7 @@ def message(mtype,expected,received,description):
             debug_info = debug_info + "{}:{} At {} ".format(caller.filename,caller.lineno,caller.function)
     if mtype == "E":
         error = True
-    print "{}. {} expected, {} received. {} {}".format(mtype,expected,received,description,debug_info)
+    error_file.write("{}. {} expected, {} received. {} {}".format(mtype,expected,received,description,debug_info))
 
 def get_token(lexema):
     global debug_mode
@@ -501,12 +503,18 @@ def main():
             debug_mode = True
             print "Debug Mode Activated"
 
+    error_file = open(sys.argv[1] + ".err", "w")
     Compile(contents)
-    print output
-
+    
     if debug_mode:
         print contents
         print sym_table
+    
+    f = open(sys.argv[1] + ".out", "w")
+    f.write(output)
+    f.close()
+    
+    error_file.close()
 
 if __name__ == "__main__":
     main()
