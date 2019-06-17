@@ -1,0 +1,26 @@
+// this is a comment
+$define
+    $int x:=50
+    $string hello := "hello"
+    $string world := "world"
+    $int repcount:=0
+$begin
+    
+    $turn(right,90)
+    $print(hello)
+    $pencil(up)
+    $move(forward,50)
+    $pencil(down)
+    $print(world)
+    $pencil(up)
+    $move(forward,150)
+    $pencil(down)
+
+    $if(x>10) $begin
+        $for (50) $begin
+            $move(forward,repcount * 2)
+            $turn(right,90)
+        $end
+    $end
+
+$end
