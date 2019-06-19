@@ -17,7 +17,7 @@ unsigned char i2c_notready(void) {
   return (UCB0STAT & UCBBUSY);
 }
 
-void master_receiver_mode_init(unsigned char addr){
+void i2c_master_receiver_mode_init(unsigned char addr){
     P3SEL |= 0x03;                            // Assign I2C pins to USCI_B0
     UCB0CTL1 |= UCSWRST;                      // Enable SW reset
     UCB0CTL0 = UCMST + UCMODE_3 + UCSYNC;     // I2C Master, synchronous mode
@@ -29,7 +29,7 @@ void master_receiver_mode_init(unsigned char addr){
     UCB0IE |= UCRXIE + UCSTPIE + UCSTTIE;                         // Enable RX interrupt
 }
 
-void master_transmitter_mode_init(unsigned char addr) {
+void i2c_master_transmitter_mode_init(unsigned char addr) {
     P3SEL |= 0x03;                            // Assign I2C pins to USCI_B0
     UCB0CTL1 |= UCSWRST;                      // Enable SW reset
     UCB0CTL0 = UCMST + UCMODE_3 + UCSYNC;     // I2C Master, synchronous mode
@@ -41,7 +41,7 @@ void master_transmitter_mode_init(unsigned char addr) {
     UCB0IE |= UCTXIE + UCSTPIE + UCSTTIE;                          // Enable TX interrupt
 }
 
-void receive_data(unsigned int size, unsigned char *buffer) {
+void i2c_receive_data(unsigned int size, unsigned char *buffer) {
     RXData = buffer;
     RXByteCtr = size;
     while (UCB0CTL1 & UCTXSTP);             // Ensure stop condition got sent
@@ -51,7 +51,7 @@ void receive_data(unsigned int size, unsigned char *buffer) {
     while (UCB0CTL1 & UCTXSTP);             // Ensure stop condition got sent
 }
 
-void transmit_data(unsigned int size, unsigned char *buffer) {
+void i2c_transmit_data(unsigned int size, unsigned char *buffer) {
     TXData = buffer;
     TXByteCtr = size;
     while (UCB0CTL1 & UCTXSTP);             // Ensure stop condition got sent

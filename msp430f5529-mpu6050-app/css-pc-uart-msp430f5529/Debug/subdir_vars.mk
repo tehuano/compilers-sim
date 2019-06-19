@@ -5,28 +5,25 @@
 SHELL = cmd.exe
 
 # Add inputs and outputs from these tool invocations to the build variables 
+CMD_SRCS += \
+../lnk_msp430f5529.cmd 
+
 C_SRCS += \
-../include/src/i2c_msp430f5529.c \
-../include/src/msp6050.c 
+../main.c 
 
 C_DEPS += \
-./include/src/i2c_msp430f5529.d \
-./include/src/msp6050.d 
+./main.d 
 
 OBJS += \
-./include/src/i2c_msp430f5529.obj \
-./include/src/msp6050.obj 
+./main.obj 
 
 OBJS__QUOTED += \
-"include\src\i2c_msp430f5529.obj" \
-"include\src\msp6050.obj" 
+"main.obj" 
 
 C_DEPS__QUOTED += \
-"include\src\i2c_msp430f5529.d" \
-"include\src\msp6050.d" 
+"main.d" 
 
 C_SRCS__QUOTED += \
-"../include/src/i2c_msp430f5529.c" \
-"../include/src/msp6050.c" 
+"../main.c" 
 
 

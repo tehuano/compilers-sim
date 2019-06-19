@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker PC v18.12.1                    
 ******************************************************************************
->> Linked Wed Jun 19 03:09:24 2019
+>> Linked Tue Jun 18 21:41:46 2019
 
-OUTPUT FILE NAME:   <mpu6050-i2c-msp430.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00004474
+OUTPUT FILE NAME:   <css-pc-uart-msp430f5529.out>
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00004424
 
 
 MEMORY CONFIGURATION
@@ -19,8 +19,8 @@ MEMORY CONFIGURATION
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
   USBRAM                00001c00   00000800  00000000  00000800  RWIX
-  RAM                   00002400   00002000  000000bd  00001f43  RWIX
-  FLASH                 00004400   0000bb80  000000c2  0000babe  RWIX
+  RAM                   00002400   00002000  000000a8  00001f58  RWIX
+  FLASH                 00004400   0000bb80  0000007c  0000bb04  RWIX
   INT00                 0000ff80   00000002  00000000  00000002  RWIX
   INT01                 0000ff82   00000002  00000000  00000002  RWIX
   INT02                 0000ff84   00000002  00000000  00000002  RWIX
@@ -85,7 +85,7 @@ MEMORY CONFIGURATION
   INT61                 0000fffa   00000002  00000002  00000000  RWIX
   INT62                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FLASH2                00010000   00014400  0000047a  00013f86  RWIX
+  FLASH2                00010000   00014400  000002fc  00014104  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -93,29 +93,28 @@ SECTION ALLOCATION MAP
  output                                  attributes/
 section   page    origin      length       input sections
 --------  ----  ----------  ----------   ----------------
-.bss       0    00002400    00000010     UNINITIALIZED
-                  00002400    00000008     msp6050.obj (.bss:rx_buffer)
-                  00002408    00000008     msp6050.obj (.bss:tx_buffer)
+.data      0    00002400    00000006     UNINITIALIZED
+                  00002400    00000006     main.obj (.data:mensaje1)
 
-.data      0    00002410    0000000d     UNINITIALIZED
-                  00002410    0000000c     i2c_msp430f5529.obj (.data)
-                  0000241c    00000001     msp6050.obj (.data)
+.bss       0    00002406    00000002     UNINITIALIZED
+                  00002406    00000002     (.common:i)
 
 .stack     0    00004360    000000a0     UNINITIALIZED
                   00004360    00000004     rts430x_lc_rd_eabi.lib : boot.c.obj (.stack)
                   00004364    0000009c     --HOLE--
 
 .text:_isr 
-*          0    00004400    00000098     
-                  00004400    00000074     i2c_msp430f5529.obj (.text:_isr:USCI_B0_ISR)
-                  00004474    0000001c     rts430x_lc_rd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noargs)
-                  00004490    00000008                            : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
+*          0    00004400    00000050     
+                  00004400    00000024     main.obj (.text:_isr:USCI_A1_ISR)
+                  00004424    0000001c     rts430x_lc_rd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noargs)
+                  00004440    00000008     main.obj (.text:_isr:TIMER0_A0_ISR)
+                  00004448    00000008     rts430x_lc_rd_eabi.lib : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
 
-.cinit     0    00004498    0000002a     
-                  00004498    0000000c     (__TI_handler_table)
-                  000044a4    00000008     (.cinit..data.load) [load image, compression = lzss]
-                  000044ac    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  000044b2    00000010     (__TI_cinit_table)
+.cinit     0    00004450    0000002c     
+                  00004450    0000000c     (__TI_handler_table)
+                  0000445c    0000000a     (.cinit..data.load) [load image, compression = lzss]
+                  00004466    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  0000446c    00000010     (__TI_cinit_table)
 
 .binit     0    00004400    00000000     
 
@@ -140,7 +139,7 @@ USCI_B1    0    0000ffda    00000002
                   0000ffda    00000002     rts430x_lc_rd_eabi.lib : int45.asm.obj (.int45)
 
 USCI_A1    0    0000ffdc    00000002     
-                  0000ffdc    00000002     rts430x_lc_rd_eabi.lib : int46.asm.obj (.int46)
+                  0000ffdc    00000002     main.obj (.int46)
 
 PORT1      0    0000ffde    00000002     
                   0000ffde    00000002     rts430x_lc_rd_eabi.lib : int47.asm.obj (.int47)
@@ -165,13 +164,13 @@ TIMER0_A1
 
 TIMER0_A0 
 *          0    0000ffea    00000002     
-                  0000ffea    00000002     rts430x_lc_rd_eabi.lib : int53.asm.obj (.int53)
+                  0000ffea    00000002     main.obj (.int53)
 
 ADC12      0    0000ffec    00000002     
                   0000ffec    00000002     rts430x_lc_rd_eabi.lib : int54.asm.obj (.int54)
 
 USCI_B0    0    0000ffee    00000002     
-                  0000ffee    00000002     i2c_msp430f5529.obj (.int55)
+                  0000ffee    00000002     rts430x_lc_rd_eabi.lib : int55.asm.obj (.int55)
 
 USCI_A0    0    0000fff0    00000002     
                   0000fff0    00000002     rts430x_lc_rd_eabi.lib : int56.asm.obj (.int56)
@@ -199,48 +198,32 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.c.obj (.reset)
 
-.text      0    00010000    0000047a     
-                  00010000    000000be     main.obj (.text:main)
-                  000100be    00000076     rts430x_lc_rd_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
-                  00010134    00000062     msp6050.obj (.text:mpu6050_read_accelerometer)
-                  00010196    00000062     msp6050.obj (.text:mpu6050_read_gyroscope)
-                  000101f8    00000054     rts430x_lc_rd_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
-                  0001024c    0000004e     msp6050.obj (.text:mpu6050_read_register)
-                  0001029a    00000032     i2c_msp430f5529.obj (.text:i2c_master_receiver_mode_init)
-                  000102cc    00000032     i2c_msp430f5529.obj (.text:i2c_master_transmitter_mode_init)
-                  000102fe    0000002c     msp6050.obj (.text:mpu6050_write_register)
-                  0001032a    00000028     msp6050.obj (.text:mpu6050_init)
-                  00010352    00000026     i2c_msp430f5529.obj (.text:i2c_receive_data)
-                  00010378    00000026     i2c_msp430f5529.obj (.text:i2c_transmit_data)
-                  0001039e    00000026     msp6050.obj (.text:mpu6050_read_temperature)
-                  000103c4    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
-                  000103e8    00000024     uart_msp430f5529.obj (.text:uart_init)
-                  0001040c    00000014     rts430x_lc_rd_eabi.lib : memcpy.c.obj (.text:memcpy)
-                  00010420    00000014     uart_msp430f5529.obj (.text:uart_handshake)
-                  00010434    00000012     rts430x_lc_rd_eabi.lib : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  00010446    0000000c     uart_msp430f5529.obj (.text:uart_receive_byte)
-                  00010452    0000000c     uart_msp430f5529.obj (.text:uart_send_byte)
-                  0001045e    0000000a     i2c_msp430f5529.obj (.text:i2c_notready)
-                  00010468    00000006     rts430x_lc_rd_eabi.lib : exit.c.obj (.text:abort)
-                  0001046e    00000006     msp6050.obj (.text:mpu6050_set_device_address)
-                  00010474    00000004     rts430x_lc_rd_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
-                  00010478    00000002                            : startup.c.obj (.text:_system_post_cinit)
+.text      0    00010000    000002fc     
+                  00010000    00000092     main.obj (.text:configuracion)
+                  00010092    00000076     rts430x_lc_rd_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  00010108    00000054                            : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
+                  0001015c    00000052     main.obj (.text:main)
+                  000101ae    0000004e     main.obj (.text:SetVcoreUp)
+                  000101fc    00000030     main.obj (.text:Mydelay)
+                  0001022c    0000002a     main.obj (.text:configUART)
+                  00010256    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
+                  0001027a    00000022     main.obj (.text:configPWM)
+                  0001029c    0000001a     main.obj (.text:configadc12)
+                  000102b6    00000014     main.obj (.text:configTA0)
+                  000102ca    00000014     rts430x_lc_rd_eabi.lib : memcpy.c.obj (.text:memcpy)
+                  000102de    00000012                            : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  000102f0    00000006                            : exit.c.obj (.text:abort)
+                  000102f6    00000004                            : pre_init.c.obj (.text:_system_pre_init)
+                  000102fa    00000002                            : startup.c.obj (.text:_system_post_cinit)
 
 MODULE SUMMARY
 
        Module                       code   ro data   rw data
        ------                       ----   -------   -------
     .\
-       main.obj                     190    0         0      
+       main.obj                     520    4         8      
     +--+----------------------------+------+---------+---------+
-       Total:                       190    0         0      
-                                                            
-    .\src\
-       msp6050.obj                  402    0         17     
-       i2c_msp430f5529.obj          302    2         12     
-       uart_msp430f5529.obj         80     0         0      
-    +--+----------------------------+------+---------+---------+
-       Total:                       784    2         29     
+       Total:                       520    4         8      
                                                             
     C:\ti\ccs900\ccs\tools\compiler\ti-cgt-msp430_18.12.1.LTS\lib\rts430x_lc_rd_eabi.lib
        copy_decompress_lzss.c.obj   118    0         0      
@@ -257,15 +240,14 @@ MODULE SUMMARY
        int43.asm.obj                0      2         0      
        int44.asm.obj                0      2         0      
        int45.asm.obj                0      2         0      
-       int46.asm.obj                0      2         0      
        int47.asm.obj                0      2         0      
        int48.asm.obj                0      2         0      
        int49.asm.obj                0      2         0      
        int50.asm.obj                0      2         0      
        int51.asm.obj                0      2         0      
        int52.asm.obj                0      2         0      
-       int53.asm.obj                0      2         0      
        int54.asm.obj                0      2         0      
+       int55.asm.obj                0      2         0      
        int56.asm.obj                0      2         0      
        int57.asm.obj                0      2         0      
        int58.asm.obj                0      2         0      
@@ -275,24 +257,24 @@ MODULE SUMMARY
        int62.asm.obj                0      2         0      
        startup.c.obj                2      0         0      
     +--+----------------------------+------+---------+---------+
-       Total:                       324    44        0      
+       Total:                       324    42        0      
                                                             
        Stack:                       0      0         160    
-       Linker Generated:            0      42        0      
+       Linker Generated:            0      44        0      
     +--+----------------------------+------+---------+---------+
-       Grand Total:                 1298   88        189    
+       Grand Total:                 844    90        168    
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 000044b2 records: 2, size/record: 8, table size: 16
-	.data: load addr=000044a4, load size=00000008 bytes, run addr=00002410, run size=0000000d bytes, compression=lzss
-	.bss: load addr=000044ac, load size=00000006 bytes, run addr=00002400, run size=00000010 bytes, compression=zero_init
+__TI_cinit_table @ 0000446c records: 2, size/record: 8, table size: 16
+	.data: load addr=0000445c, load size=0000000a bytes, run addr=00002400, run size=00000006 bytes, compression=lzss
+	.bss: load addr=00004466, load size=00000006 bytes, run addr=00002406, run size=00000002 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00004498 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 00004450 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_zero_init
 	index: 1, handler: __TI_decompress_lzss
 	index: 2, handler: __TI_decompress_none
@@ -384,7 +366,7 @@ address   name
 00000732  ADC12MEM9                              
 00000733  ADC12MEM9_H                            
 00000732  ADC12MEM9_L                            
-00010468  C$$EXIT                                
+000102f0  C$$EXIT                                
 000008c0  CBCTL0                                 
 000008c1  CBCTL0_H                               
 000008c0  CBCTL0_L                               
@@ -509,6 +491,7 @@ address   name
 000004c2  MPYS_L                                 
 000004c1  MPY_H                                  
 000004c0  MPY_L                                  
+000101fc  Mydelay                                
 000004c8  OP2                                    
 000004e2  OP2H                                   
 000004e3  OP2H_H                                 
@@ -761,6 +744,7 @@ address   name
 0000019a  SYSUNIV                                
 0000019b  SYSUNIV_H                              
 0000019a  SYSUNIV_L                              
+000101ae  SetVcoreUp                             
 00000352  TA0CCR0                                
 00000354  TA0CCR1                                
 00000356  TA0CCR2                                
@@ -813,6 +797,7 @@ address   name
 000003e0  TB0EX0                                 
 000003ee  TB0IV                                  
 000003d0  TB0R                                   
+00004440  TIMER0_A0_ISR                          
 000005d0  UCA0ABCTL                              
 000005c6  UCA0BRW                                
 000005c7  UCA0BRW_H                              
@@ -1048,20 +1033,20 @@ address   name
 00000932  USBVECINT                              
 00000933  USBVECINT_H                            
 00000932  USBVECINT_L                            
-00004400  USCI_B0_ISR                            
+00004400  USCI_A1_ISR                            
 0000015c  WDTCTL                                 
 0000015d  WDTCTL_H                               
 0000015c  WDTCTL_L                               
 00004400  __STACK_END                            
 000000a0  __STACK_SIZE                           
-000044b2  __TI_CINIT_Base                        
-000044c2  __TI_CINIT_Limit                       
-00004498  __TI_Handler_Table_Base                
-000044a4  __TI_Handler_Table_Limit               
-00004490  __TI_ISR_TRAP                          
-000101f8  __TI_auto_init_nobinit_nopinit_hold_wdt
-000100be  __TI_decompress_lzss                   
-00010434  __TI_decompress_none                   
+0000446c  __TI_CINIT_Base                        
+0000447c  __TI_CINIT_Limit                       
+00004450  __TI_Handler_Table_Base                
+0000445c  __TI_Handler_Table_Limit               
+00004448  __TI_ISR_TRAP                          
+00010108  __TI_auto_init_nobinit_nopinit_hold_wdt
+00010092  __TI_decompress_lzss                   
+000102de  __TI_decompress_none                   
 0000ffd2  __TI_int41                             
 0000ffd4  __TI_int42                             
 0000ffd6  __TI_int43                             
@@ -1087,32 +1072,23 @@ address   name
 ffffffff  __TI_pprof_out_hndl                    
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
-000103c4  __TI_zero_init_nomemset                
+00010256  __TI_zero_init_nomemset                
 ffffffff  __c_args__                             
-00004474  _c_int00_noargs                        
+00004424  _c_int00_noargs                        
 0000fffe  _reset_vector                          
 00004360  _stack                                 
-00010478  _system_post_cinit                     
-00010474  _system_pre_init                       
-00010468  abort                                  
-0001029a  i2c_master_receiver_mode_init          
-000102cc  i2c_master_transmitter_mode_init       
-0001045e  i2c_notready                           
-00010352  i2c_receive_data                       
-00010378  i2c_transmit_data                      
-00010000  main                                   
-0001040c  memcpy                                 
-0001032a  mpu6050_init                           
-00010134  mpu6050_read_accelerometer             
-00010196  mpu6050_read_gyroscope                 
-0001024c  mpu6050_read_register                  
-0001039e  mpu6050_read_temperature               
-0001046e  mpu6050_set_device_address             
-000102fe  mpu6050_write_register                 
-00010420  uart_handshake                         
-000103e8  uart_init                              
-00010446  uart_receive_byte                      
-00010452  uart_send_byte                         
+000102fa  _system_post_cinit                     
+000102f6  _system_pre_init                       
+000102f0  abort                                  
+0001027a  configPWM                              
+000102b6  configTA0                              
+0001022c  configUART                             
+0001029c  configadc12                            
+00010000  configuracion                          
+00002406  i                                      
+0001015c  main                                   
+000102ca  memcpy                                 
+00002400  mensaje1                               
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1868,15 +1844,18 @@ address   name
 000023fd  USBIEPBBAY_7                           
 000023fe  USBIEPBCTY_7                           
 000023ff  USBIEPSIZXY_7                          
+00002400  mensaje1                               
+00002406  i                                      
 00004360  _stack                                 
-00004400  USCI_B0_ISR                            
+00004400  USCI_A1_ISR                            
 00004400  __STACK_END                            
-00004474  _c_int00_noargs                        
-00004490  __TI_ISR_TRAP                          
-00004498  __TI_Handler_Table_Base                
-000044a4  __TI_Handler_Table_Limit               
-000044b2  __TI_CINIT_Base                        
-000044c2  __TI_CINIT_Limit                       
+00004424  _c_int00_noargs                        
+00004440  TIMER0_A0_ISR                          
+00004448  __TI_ISR_TRAP                          
+00004450  __TI_Handler_Table_Base                
+0000445c  __TI_Handler_Table_Limit               
+0000446c  __TI_CINIT_Base                        
+0000447c  __TI_CINIT_Limit                       
 0000ffd2  __TI_int41                             
 0000ffd4  __TI_int42                             
 0000ffd6  __TI_int43                             
@@ -1900,35 +1879,26 @@ address   name
 0000fffa  __TI_int61                             
 0000fffc  __TI_int62                             
 0000fffe  _reset_vector                          
-00010000  main                                   
-000100be  __TI_decompress_lzss                   
-00010134  mpu6050_read_accelerometer             
-00010196  mpu6050_read_gyroscope                 
-000101f8  __TI_auto_init_nobinit_nopinit_hold_wdt
-0001024c  mpu6050_read_register                  
-0001029a  i2c_master_receiver_mode_init          
-000102cc  i2c_master_transmitter_mode_init       
-000102fe  mpu6050_write_register                 
-0001032a  mpu6050_init                           
-00010352  i2c_receive_data                       
-00010378  i2c_transmit_data                      
-0001039e  mpu6050_read_temperature               
-000103c4  __TI_zero_init_nomemset                
-000103e8  uart_init                              
-0001040c  memcpy                                 
-00010420  uart_handshake                         
-00010434  __TI_decompress_none                   
-00010446  uart_receive_byte                      
-00010452  uart_send_byte                         
-0001045e  i2c_notready                           
-00010468  C$$EXIT                                
-00010468  abort                                  
-0001046e  mpu6050_set_device_address             
-00010474  _system_pre_init                       
-00010478  _system_post_cinit                     
+00010000  configuracion                          
+00010092  __TI_decompress_lzss                   
+00010108  __TI_auto_init_nobinit_nopinit_hold_wdt
+0001015c  main                                   
+000101ae  SetVcoreUp                             
+000101fc  Mydelay                                
+0001022c  configUART                             
+00010256  __TI_zero_init_nomemset                
+0001027a  configPWM                              
+0001029c  configadc12                            
+000102b6  configTA0                              
+000102ca  memcpy                                 
+000102de  __TI_decompress_none                   
+000102f0  C$$EXIT                                
+000102f0  abort                                  
+000102f6  _system_pre_init                       
+000102fa  _system_post_cinit                     
 ffffffff  __TI_pprof_out_hndl                    
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
 ffffffff  __c_args__                             
 
-[811 symbols]
+[805 symbols]

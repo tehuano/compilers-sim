@@ -35,6 +35,9 @@
 
 #define REG_SIZE 8
 
+#define UINT_H(x) ((x >> 8) & 0x00ff)
+#define UINT_L(x) (x & 0x00ff)
+
 typedef struct {
     unsigned int xout;
     unsigned int yout;
@@ -53,5 +56,6 @@ void mpu6050_write_register(unsigned char, unsigned char);
 void mpu6050_read_temperature(unsigned int *temperature);
 void mpu6050_read_accelerometer(accelerometer_t *acc);
 void mpu6050_read_gyroscope(gyroscope_t *acc);
+void mpu6050_init();
 
 #endif /* INCLUDE_MPU6050_H_ */
