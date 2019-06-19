@@ -2,6 +2,8 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
+SHELL = cmd.exe
+
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../include/src/i2c_msp430f5529.c \
@@ -16,12 +18,12 @@ OBJS += \
 ./include/src/msp6050.obj 
 
 OBJS__QUOTED += \
-"include/src/i2c_msp430f5529.obj" \
-"include/src/msp6050.obj" 
+"include\src\i2c_msp430f5529.obj" \
+"include\src\msp6050.obj" 
 
 C_DEPS__QUOTED += \
-"include/src/i2c_msp430f5529.d" \
-"include/src/msp6050.d" 
+"include\src\i2c_msp430f5529.d" \
+"include\src\msp6050.d" 
 
 C_SRCS__QUOTED += \
 "../include/src/i2c_msp430f5529.c" \
