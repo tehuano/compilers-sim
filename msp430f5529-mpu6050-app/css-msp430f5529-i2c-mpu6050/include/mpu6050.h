@@ -35,6 +35,9 @@
 
 #define REG_SIZE 8
 
+#define GYRO_CONFIG 0x1B
+#define ACCEL_CONFIG 0x1C
+
 #define UINT_H(x) ((x >> 8) & 0x00ff)
 #define UINT_L(x) (x & 0x00ff)
 

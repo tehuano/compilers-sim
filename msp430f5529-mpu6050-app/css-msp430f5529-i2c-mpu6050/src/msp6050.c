@@ -83,4 +83,8 @@ void mpu6050_init() {
     ret = mpu6050_read_register(PWR_MGMT_1);
     // wake up the sensor
     mpu6050_write_register(PWR_MGMT_1, ret & ~0x40);
+    // gyro configuration
+    mpu6050_write_register(GYRO_CONFIG, 0x00);
+    // accel configuration
+    mpu6050_write_register(ACCEL_CONFIG, 0x00);
 }
