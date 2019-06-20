@@ -2,10 +2,9 @@
  Simulation of a rotating and moving mpu6050 sensor
  Developed by: 
 """
-import sys, math, pygame, serial
+import sys, math, pygame, serial, time
 from threading import Thread
 from operator import itemgetter
-from datetime import datetime
 
 # Temperature
 Temp = 0
@@ -40,6 +39,8 @@ past_time = 0
 AngX = 0
 AngY = 0
 AngZ = 0
+# initialized
+initialized = False
 
 def uart_handshake(port):
     ok = b''
@@ -48,7 +49,7 @@ def uart_handshake(port):
         ok = port.read()
 
 def callibrate_gyro(port):
-    global GxC,GyC,GzC,Gx,Gy,Gz
+    global GxC,GyC,GzC,Gx,Gy,Gz,initialized
     for x in range(5):
         uart_handshake(port)
         get_sensor_data(port)
@@ -56,9 +57,10 @@ def callibrate_gyro(port):
         GyC = GyC + Gy
         GzC = GzC + Gz
     # compute average of the error
-    GxC = GxC / 5000
-    GyC = GyC / 5000
-    GzC = GzC / 5000
+    GxC = GxC / 5
+    GyC = GyC / 5
+    GzC = GzC / 5
+    initialized = True
 
 def get_sensor_data(port):
     global Gpx,Gpy,Gpz,Temp,Ax,Ay,Az,Gx,Gy,Gz,aGFx,aGFy,aGFz,gRx,gRy,gRz,past_time,current_time
@@ -67,10 +69,9 @@ def get_sensor_data(port):
     Gpz = Gz
     # get window of time
     past_time = current_time
-    current_time = datetime.now()
-    current_time = current_time.microsecond
+    current_time = int(round(time.time() * 1000))
     # load data from uart
-    Temp = port.read(2) 
+    Tempt = port.read(2) 
     Ax = port.read(2)
     Ay = port.read(2)
     Az = port.read(2)
@@ -78,7 +79,7 @@ def get_sensor_data(port):
     Gy = port.read(2)
     Gz = port.read(2)
     # temp values, from datasheet
-    Temp = (int.from_bytes(Temp,byteorder = 'big', signed = True) / 340.00) + 36.53
+    Temp = (int.from_bytes(Tempt,byteorder = 'big', signed = True) / 340.00) + 36.53
     # accel values
     Ax = (int.from_bytes(Ax,byteorder = 'big', signed = True))
     Ay = (int.from_bytes(Ay,byteorder = 'big', signed = True))
@@ -111,7 +112,7 @@ def calculate_angle():
 
 
 def get_data():
-    global Ax
+    global current_time,past_time,AngX,AngY,AngZ
     print("Connecting to serial port ...")
     port = serial.Serial(port = 'COM5',
                      baudrate = 115200,
@@ -127,6 +128,7 @@ def get_data():
         get_sensor_data(port)
         calculate_angle()
         print("T = %.3f | Ax = %.3f, Ay = %.3f, Az = %.3f | Gx = %.3f, Gy = %.3f, Gz = %.3f" % (Temp,aGFx,aGFy,aGFz,gRx,gRy,gRz))
+        print("Time = %d | Agx = %.3f, Agy = %.3f, Agz = %.3f" % (current_time > past_time,AngX,AngY,AngZ))
 
 class Point3D:
     def __init__(self, x = 0, y = 0, z = 0):
@@ -191,32 +193,40 @@ class Simulation:
         self.faces  = [(0,1,2,3),(1,5,6,2),(5,4,7,6),(4,0,3,7),(0,4,5,1),(3,2,6,7)]
  
         # Define colors for each face
-        self.colors = [(200,200,250),(220,250,200),(250,200,230),(200,220,250),(200,250,230),(250,230,200)]
+        self.colors = [(100,200,200),(100,200,240),(100,240,200),(100,240,240),(100,100,200),(100,200,100)]
  
         self.angle = 0
         
+    def temp2color(self,t):
+        if t > 40:
+            t = 38
+        if t < 0:
+            t = 1
+        return (255 * (t/40))
+
     def run(self):
         """ Main Loop """
-        while 1:
+        global initialized,AngX,AngY,AngZ,Temp
+        while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
  
-            self.clock.tick(50)
-            self.screen.fill((200,200,200))
+            self.clock.tick(200)
+            self.screen.fill((180,180,180))
  
             # It will hold transformed vertices.
             t = []
  
             for v in self.vertices:
                 # Rotate the point around X axis, then around Y axis, and finally around Z axis.
-                r = v.rotateX(AngX).rotateY(AngY).rotateZ(AngZ)
+                r = v.rotateX(-AngX).rotateY(-AngZ).rotateZ(-AngY)
                 # Transform the point from 3D to 2D
                 p = r.project(self.screen.get_width(), self.screen.get_height(), 256, 4)
                 # Put the point in the list of transformed vertices
                 t.append(p)
- 
+            self.colors  = [(self.temp2color(Temp), color[1], color[2]) for color in self.colors]
             # Calculate the average Z values of each face.
             avg_z = []
             i = 0
