@@ -28,7 +28,6 @@ void uart_init( ){
     UCA1CTL1 |= UCSWRST;                      // **Put state machine in reset**
     UCA1CTL1 |= UCSSEL_2;                     // SMCLK
     UCA1BR0 = 9;                              // 1MHz 115200 (see User's Guide)
-    //UCA1BR0 = 52;                             // //8MHz, OSC16, 9600
     UCA1BR1 = 0;                              // 1MHz 115200
     UCA1MCTL |= UCBRS_1 + UCBRF_0;            // Modulation UCBRSx=1, UCBRFx=0
     UCA1CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**

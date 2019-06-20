@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v18.12.1                    
 ******************************************************************************
->> Linked Wed Jun 19 03:09:24 2019
+>> Linked Wed Jun 19 22:19:11 2019
 
 OUTPUT FILE NAME:   <mpu6050-i2c-msp430.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00004474
@@ -85,7 +85,7 @@ MEMORY CONFIGURATION
   INT61                 0000fffa   00000002  00000002  00000000  RWIX
   INT62                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FLASH2                00010000   00014400  0000047a  00013f86  RWIX
+  FLASH2                00010000   00014400  00000478  00013f88  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -199,48 +199,48 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.c.obj (.reset)
 
-.text      0    00010000    0000047a     
-                  00010000    000000be     main.obj (.text:main)
-                  000100be    00000076     rts430x_lc_rd_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
-                  00010134    00000062     msp6050.obj (.text:mpu6050_read_accelerometer)
-                  00010196    00000062     msp6050.obj (.text:mpu6050_read_gyroscope)
-                  000101f8    00000054     rts430x_lc_rd_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
-                  0001024c    0000004e     msp6050.obj (.text:mpu6050_read_register)
-                  0001029a    00000032     i2c_msp430f5529.obj (.text:i2c_master_receiver_mode_init)
-                  000102cc    00000032     i2c_msp430f5529.obj (.text:i2c_master_transmitter_mode_init)
-                  000102fe    0000002c     msp6050.obj (.text:mpu6050_write_register)
-                  0001032a    00000028     msp6050.obj (.text:mpu6050_init)
-                  00010352    00000026     i2c_msp430f5529.obj (.text:i2c_receive_data)
-                  00010378    00000026     i2c_msp430f5529.obj (.text:i2c_transmit_data)
-                  0001039e    00000026     msp6050.obj (.text:mpu6050_read_temperature)
-                  000103c4    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
-                  000103e8    00000024     uart_msp430f5529.obj (.text:uart_init)
-                  0001040c    00000014     rts430x_lc_rd_eabi.lib : memcpy.c.obj (.text:memcpy)
-                  00010420    00000014     uart_msp430f5529.obj (.text:uart_handshake)
-                  00010434    00000012     rts430x_lc_rd_eabi.lib : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  00010446    0000000c     uart_msp430f5529.obj (.text:uart_receive_byte)
-                  00010452    0000000c     uart_msp430f5529.obj (.text:uart_send_byte)
-                  0001045e    0000000a     i2c_msp430f5529.obj (.text:i2c_notready)
-                  00010468    00000006     rts430x_lc_rd_eabi.lib : exit.c.obj (.text:abort)
-                  0001046e    00000006     msp6050.obj (.text:mpu6050_set_device_address)
-                  00010474    00000004     rts430x_lc_rd_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
-                  00010478    00000002                            : startup.c.obj (.text:_system_post_cinit)
+.text      0    00010000    00000478     
+                  00010000    000000a8     main.obj (.text:main)
+                  000100a8    00000076     rts430x_lc_rd_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  0001011e    00000062     msp6050.obj (.text:mpu6050_read_accelerometer)
+                  00010180    00000062     msp6050.obj (.text:mpu6050_read_gyroscope)
+                  000101e2    00000054     rts430x_lc_rd_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
+                  00010236    0000004e     msp6050.obj (.text:mpu6050_read_register)
+                  00010284    0000003c     msp6050.obj (.text:mpu6050_init)
+                  000102c0    00000032     i2c_msp430f5529.obj (.text:i2c_master_receiver_mode_init)
+                  000102f2    00000032     i2c_msp430f5529.obj (.text:i2c_master_transmitter_mode_init)
+                  00010324    0000002c     msp6050.obj (.text:mpu6050_write_register)
+                  00010350    00000026     i2c_msp430f5529.obj (.text:i2c_receive_data)
+                  00010376    00000026     i2c_msp430f5529.obj (.text:i2c_transmit_data)
+                  0001039c    00000026     msp6050.obj (.text:mpu6050_read_temperature)
+                  000103c2    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
+                  000103e6    00000024     uart_msp430f5529.obj (.text:uart_init)
+                  0001040a    00000014     rts430x_lc_rd_eabi.lib : memcpy.c.obj (.text:memcpy)
+                  0001041e    00000014     uart_msp430f5529.obj (.text:uart_handshake)
+                  00010432    00000012     rts430x_lc_rd_eabi.lib : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  00010444    0000000c     uart_msp430f5529.obj (.text:uart_receive_byte)
+                  00010450    0000000c     uart_msp430f5529.obj (.text:uart_send_byte)
+                  0001045c    0000000a     i2c_msp430f5529.obj (.text:i2c_notready)
+                  00010466    00000006     rts430x_lc_rd_eabi.lib : exit.c.obj (.text:abort)
+                  0001046c    00000006     msp6050.obj (.text:mpu6050_set_device_address)
+                  00010472    00000004     rts430x_lc_rd_eabi.lib : pre_init.c.obj (.text:_system_pre_init)
+                  00010476    00000002                            : startup.c.obj (.text:_system_post_cinit)
 
 MODULE SUMMARY
 
        Module                       code   ro data   rw data
        ------                       ----   -------   -------
     .\
-       main.obj                     190    0         0      
+       main.obj                     168    0         0      
     +--+----------------------------+------+---------+---------+
-       Total:                       190    0         0      
+       Total:                       168    0         0      
                                                             
     .\src\
-       msp6050.obj                  402    0         17     
+       msp6050.obj                  422    0         17     
        i2c_msp430f5529.obj          302    2         12     
        uart_msp430f5529.obj         80     0         0      
     +--+----------------------------+------+---------+---------+
-       Total:                       784    2         29     
+       Total:                       804    2         29     
                                                             
     C:\ti\ccs900\ccs\tools\compiler\ti-cgt-msp430_18.12.1.LTS\lib\rts430x_lc_rd_eabi.lib
        copy_decompress_lzss.c.obj   118    0         0      
@@ -280,7 +280,7 @@ MODULE SUMMARY
        Stack:                       0      0         160    
        Linker Generated:            0      42        0      
     +--+----------------------------+------+---------+---------+
-       Grand Total:                 1298   88        189    
+       Grand Total:                 1296   88        189    
 
 
 LINKER GENERATED COPY TABLES
@@ -384,7 +384,7 @@ address   name
 00000732  ADC12MEM9                              
 00000733  ADC12MEM9_H                            
 00000732  ADC12MEM9_L                            
-00010468  C$$EXIT                                
+00010466  C$$EXIT                                
 000008c0  CBCTL0                                 
 000008c1  CBCTL0_H                               
 000008c0  CBCTL0_L                               
@@ -1059,9 +1059,9 @@ address   name
 00004498  __TI_Handler_Table_Base                
 000044a4  __TI_Handler_Table_Limit               
 00004490  __TI_ISR_TRAP                          
-000101f8  __TI_auto_init_nobinit_nopinit_hold_wdt
-000100be  __TI_decompress_lzss                   
-00010434  __TI_decompress_none                   
+000101e2  __TI_auto_init_nobinit_nopinit_hold_wdt
+000100a8  __TI_decompress_lzss                   
+00010432  __TI_decompress_none                   
 0000ffd2  __TI_int41                             
 0000ffd4  __TI_int42                             
 0000ffd6  __TI_int43                             
@@ -1087,32 +1087,32 @@ address   name
 ffffffff  __TI_pprof_out_hndl                    
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
-000103c4  __TI_zero_init_nomemset                
+000103c2  __TI_zero_init_nomemset                
 ffffffff  __c_args__                             
 00004474  _c_int00_noargs                        
 0000fffe  _reset_vector                          
 00004360  _stack                                 
-00010478  _system_post_cinit                     
-00010474  _system_pre_init                       
-00010468  abort                                  
-0001029a  i2c_master_receiver_mode_init          
-000102cc  i2c_master_transmitter_mode_init       
-0001045e  i2c_notready                           
-00010352  i2c_receive_data                       
-00010378  i2c_transmit_data                      
+00010476  _system_post_cinit                     
+00010472  _system_pre_init                       
+00010466  abort                                  
+000102c0  i2c_master_receiver_mode_init          
+000102f2  i2c_master_transmitter_mode_init       
+0001045c  i2c_notready                           
+00010350  i2c_receive_data                       
+00010376  i2c_transmit_data                      
 00010000  main                                   
-0001040c  memcpy                                 
-0001032a  mpu6050_init                           
-00010134  mpu6050_read_accelerometer             
-00010196  mpu6050_read_gyroscope                 
-0001024c  mpu6050_read_register                  
-0001039e  mpu6050_read_temperature               
-0001046e  mpu6050_set_device_address             
-000102fe  mpu6050_write_register                 
-00010420  uart_handshake                         
-000103e8  uart_init                              
-00010446  uart_receive_byte                      
-00010452  uart_send_byte                         
+0001040a  memcpy                                 
+00010284  mpu6050_init                           
+0001011e  mpu6050_read_accelerometer             
+00010180  mpu6050_read_gyroscope                 
+00010236  mpu6050_read_register                  
+0001039c  mpu6050_read_temperature               
+0001046c  mpu6050_set_device_address             
+00010324  mpu6050_write_register                 
+0001041e  uart_handshake                         
+000103e6  uart_init                              
+00010444  uart_receive_byte                      
+00010450  uart_send_byte                         
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1901,31 +1901,31 @@ address   name
 0000fffc  __TI_int62                             
 0000fffe  _reset_vector                          
 00010000  main                                   
-000100be  __TI_decompress_lzss                   
-00010134  mpu6050_read_accelerometer             
-00010196  mpu6050_read_gyroscope                 
-000101f8  __TI_auto_init_nobinit_nopinit_hold_wdt
-0001024c  mpu6050_read_register                  
-0001029a  i2c_master_receiver_mode_init          
-000102cc  i2c_master_transmitter_mode_init       
-000102fe  mpu6050_write_register                 
-0001032a  mpu6050_init                           
-00010352  i2c_receive_data                       
-00010378  i2c_transmit_data                      
-0001039e  mpu6050_read_temperature               
-000103c4  __TI_zero_init_nomemset                
-000103e8  uart_init                              
-0001040c  memcpy                                 
-00010420  uart_handshake                         
-00010434  __TI_decompress_none                   
-00010446  uart_receive_byte                      
-00010452  uart_send_byte                         
-0001045e  i2c_notready                           
-00010468  C$$EXIT                                
-00010468  abort                                  
-0001046e  mpu6050_set_device_address             
-00010474  _system_pre_init                       
-00010478  _system_post_cinit                     
+000100a8  __TI_decompress_lzss                   
+0001011e  mpu6050_read_accelerometer             
+00010180  mpu6050_read_gyroscope                 
+000101e2  __TI_auto_init_nobinit_nopinit_hold_wdt
+00010236  mpu6050_read_register                  
+00010284  mpu6050_init                           
+000102c0  i2c_master_receiver_mode_init          
+000102f2  i2c_master_transmitter_mode_init       
+00010324  mpu6050_write_register                 
+00010350  i2c_receive_data                       
+00010376  i2c_transmit_data                      
+0001039c  mpu6050_read_temperature               
+000103c2  __TI_zero_init_nomemset                
+000103e6  uart_init                              
+0001040a  memcpy                                 
+0001041e  uart_handshake                         
+00010432  __TI_decompress_none                   
+00010444  uart_receive_byte                      
+00010450  uart_send_byte                         
+0001045c  i2c_notready                           
+00010466  C$$EXIT                                
+00010466  abort                                  
+0001046c  mpu6050_set_device_address             
+00010472  _system_pre_init                       
+00010476  _system_post_cinit                     
 ffffffff  __TI_pprof_out_hndl                    
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
