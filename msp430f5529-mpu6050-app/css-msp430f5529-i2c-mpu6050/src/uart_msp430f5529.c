@@ -23,7 +23,7 @@ unsigned char uart_receive_byte() {
 }
 
 /* Función para configuración UART a 115200 a 25 MHz */
-void uart_init( ){
+void uart_init(){
     P4SEL |= BIT5+BIT4;                       // P4.5,4.4 = USCI_A1 TXD/RXD
     UCA1CTL1 |= UCSWRST;                      // **Put state machine in reset**
     UCA1CTL1 |= UCSSEL_2;                     // SMCLK

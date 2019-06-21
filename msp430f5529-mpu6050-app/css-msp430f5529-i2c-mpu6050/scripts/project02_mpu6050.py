@@ -48,18 +48,18 @@ def uart_handshake(port):
         port.write(b"1")
         ok = port.read()
 
-def callibrate_gyro(port):
+def callibrate_gyro(port,iterations):
     global GxC,GyC,GzC,Gx,Gy,Gz,initialized
-    for x in range(5):
+    for x in range(iterations):
         uart_handshake(port)
         get_sensor_data(port)
         GxC = GxC + Gx
         GyC = GyC + Gy
         GzC = GzC + Gz
     # compute average of the error
-    GxC = GxC / 5
-    GyC = GyC / 5
-    GzC = GzC / 5
+    GxC = GxC / iterations
+    GyC = GyC / iterations
+    GzC = GzC / iterations
     initialized = True
 
 def get_sensor_data(port):
@@ -109,8 +109,7 @@ def calculate_angle():
     AngX = AngX + (time_delta * (Gx + Gpx - 2*GxC)) * 0.00000382
     AngY = AngY + (time_delta * (Gy + Gpy - 2*GyC)) * 0.00000382
     AngZ = AngZ + (time_delta * (Gz + Gpz - 2*GzC)) * 0.00000382
-
-
+        
 def get_data():
     global current_time,past_time,AngX,AngY,AngZ
     print("Connecting to serial port ...")
@@ -122,7 +121,7 @@ def get_data():
                      stopbits = serial.STOPBITS_ONE,
                      timeout=1)
     print("Connected!!")
-    callibrate_gyro(port);
+    callibrate_gyro(port,50);
     while True:
         uart_handshake(port)
         get_sensor_data(port)
@@ -193,16 +192,14 @@ class Simulation:
         self.faces  = [(0,1,2,3),(1,5,6,2),(5,4,7,6),(4,0,3,7),(0,4,5,1),(3,2,6,7)]
  
         # Define colors for each face
-        self.colors = [(100,200,200),(100,200,240),(100,240,200),(100,240,240),(100,100,200),(100,200,100)]
+        self.colors = [(240,120,120),(120,240,120),(120,180,220),(180,180,240),(240,200,240),(240,200,200)]
  
         self.angle = 0
         
     def temp2color(self,t):
-        if t > 40:
-            t = 38
-        if t < 0:
-            t = 1
-        return (255 * (t/40))
+        self.colors = [(240,120,120),(120,240,120),(120,180,220),(180,180,240),(240,200,240),(240,200,200)]
+        if t > 28:
+            self.colors  = [(140,40,40),(140,40,40),(140,40,40),(140,40,40),(140,40,40),(140,40,40)]
 
     def run(self):
         """ Main Loop """
@@ -214,7 +211,7 @@ class Simulation:
                     sys.exit()
  
             self.clock.tick(200)
-            self.screen.fill((180,180,180))
+            self.screen.fill((220,220,220))
  
             # It will hold transformed vertices.
             t = []
@@ -226,7 +223,7 @@ class Simulation:
                 p = r.project(self.screen.get_width(), self.screen.get_height(), 256, 4)
                 # Put the point in the list of transformed vertices
                 t.append(p)
-            self.colors  = [(self.temp2color(Temp), color[1], color[2]) for color in self.colors]
+            self.temp2color(Temp)
             # Calculate the average Z values of each face.
             avg_z = []
             i = 0

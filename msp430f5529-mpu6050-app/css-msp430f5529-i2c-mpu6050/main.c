@@ -4,8 +4,6 @@
 
 int main(void) {
     WDTCTL = WDTPW + WDTHOLD;                 // Stop WDT
-    unsigned char ret;
-    unsigned char counter = 0;
     unsigned int temperature;
     accelerometer_t acc_t;
     gyroscope_t gyro_t;
